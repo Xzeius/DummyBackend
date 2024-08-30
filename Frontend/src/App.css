@@ -1,83 +1,13 @@
-/* Frontend/src/App.css */
-
-/* Main application container */
-.App {
-    text-align: center;
-    font-family: 'Arial', sans-serif; /* Improved font readability */
-    color: #333; /* Darker text for better contrast */
+.dashboard{
+  display: flex;
+  gap: 20px;
 }
-
-/* Header styling */
-.App-header {
-    background-color: #282c34;
-    padding: 20px;
-    color: white;
-    border-bottom: 3px solid #61dafb; /* Adds a bottom border with accent color */
-    box-shadow: 
-        0 4px 8px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
-}
-
-/* Header level 2 styling */
-h2 {
-    color: #61dafb; /* Accent color for headers */
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 1.5rem; /* Slightly larger font size for headers */
-}
-
-/* Paragraph styling */
-p {
-    margin: 10px 0;
-    line-height: 1.6; /* Improved line height for readability */
-}
-
-/* Input field styling */
-input {
-    display: block;
-    width: 80%;
-    max-width: 500px;
-    margin: 10px auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-shadow: 
-        inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle inset shadow for inputs */
-}
-
-/* Specific input types styling */
-input[type="text"],
-input[type="date"],
-input[type="email"],
-input[type="number"] {
-    /* Additional styling for specific input types can be added here */
-}
-
-/* Button styling */
-button {
-    background-color: #61dafb; /* Accent color for the button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 
-        0 4px 6px rgba(0, 0, 0, 0.2); /* Adds shadow to button */
-    transition: 
-        background-color 0.3s ease, 
-        transform 0.2s ease; /* Smooth transition */
-}
-
-/* Button hover state */
-button:hover {
-    background-color: #21a1f1; /* Darker shade on hover */
-    transform: scale(1.05); /* Slight scale effect on hover */
-}
-
-/* Button focus state */
-button:focus {
-    outline: none;
-    box-shadow: 
-        0 0 0 3px rgba(97, 218, 251, 0.5); /* Focus outline */
+.dashboard--content{
+  background: #fff;
+  flex: 1;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
 }
