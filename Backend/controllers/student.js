@@ -1,15 +1,16 @@
+// Backend/controllers/student.js
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db.js');
 
-// Get all students
-router.get('/', (req, res) => {
-    const query = 'SELECT * FROM student_details';
-    db.query(query, (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
+// // Get all students
+// router.get('/', (req, res) => {
+//     const query = 'SELECT * FROM student_details';
+//     db.query(query, (err, results) => {
+//         if (err) return res.status(500).json({ error: err.message });
+//         res.json(results);
+//     });
+// });
 
 // Get student details by PRN
 router.get('/:prn', (req, res) => {
@@ -71,3 +72,4 @@ router.delete('/:prn', (req, res) => {
 });
 
 module.exports = router;
+
