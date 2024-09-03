@@ -1,6 +1,89 @@
 
 USE college_db;
 
+CREATE TABLE student_details (
+    prn VARCHAR(10) NOT NULL PRIMARY KEY,
+    fullname VARCHAR(255) NOT NULL,
+    ac_id VARCHAR(50) NOT NULL,
+    FOREIGN KEY (ac_id) REFERENCES academic_id(ac_id)
+);
+
+-- Table for core personal details
+CREATE TABLE student_personal (
+    prn VARCHAR(10) NOT NULL PRIMARY KEY,
+    photo TEXT,
+    date_of_birth DATE NOT NULL,
+    mother_tongue VARCHAR(50) NOT NULL,
+    blood_group VARCHAR(3),
+    year_of_admission YEAR NOT NULL,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for parents' details
+CREATE TABLE student_parents (
+    prn VARCHAR(10) NOT NULL,
+    father_name VARCHAR(255) NOT NULL,
+    father_occupation VARCHAR(255) NOT NULL,
+    father_mobile_number VARCHAR(15) NOT NULL,
+    mother_name VARCHAR(255) NOT NULL,
+    mother_occupation VARCHAR(255) NOT NULL,
+    mother_mobile_number VARCHAR(15) NOT NULL,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for educational details
+CREATE TABLE student_education (
+    prn VARCHAR(10) NOT NULL,
+    ssc_percentage FLOAT NOT NULL,
+    ssc_medium VARCHAR(50) NOT NULL,
+    ssc_board VARCHAR(50) NOT NULL,
+    hsc_or_diploma_percentage FLOAT NOT NULL,
+    hsc_or_diploma_medium VARCHAR(50) NOT NULL,
+    hsc_or_diploma_board VARCHAR(50) NOT NULL,
+    cet_percentile FLOAT,
+    jee_percentile FLOAT,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for other details
+CREATE TABLE student_other (
+    prn VARCHAR(10) NOT NULL,
+    hobbies TEXT,
+    strengths TEXT,
+    weakness TEXT,
+    short_term_goals TEXT,
+    long_term_goals TEXT,
+    extra_curricular TEXT,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Academic details table
+CREATE TABLE academic_id (
+    semester INT NOT NULL,
+    branch VARCHAR(50) NOT NULL,
+    division CHAR(1) NOT NULL,
+    batch VARCHAR(10) NOT NULL,
+    ac_id VARCHAR(50) NOT NULL PRIMARY KEY
+);
+
+INSERT INTO academic_id (semester, branch, division, batch, ac_id) VALUES
+(1, 'Computer Science', 'A', 'A1', '1_CS_A1'),
+(1, 'Information Technology', 'A', 'A1', '1_IT_A1');
+INSERT INTO student_details (prn, fullname, ac_id) VALUES
+('1234567890', 'John Doe', '1_CS_A1'),
+('0987654321', 'Jane Smith', '1_IT_A1');
+INSERT INTO student_personal (prn, photo, date_of_birth, mother_tongue, blood_group, year_of_admission) VALUES
+('1234567890', 'photo_url_johndoe', '2000-05-15', 'English', 'A+', 2022),
+('0987654321', 'photo_url_janesmith', '2001-08-22', 'Hindi', NULL, 2023);
+INSERT INTO student_parents (prn, father_name, father_occupation, father_mobile_number, mother_name, mother_occupation, mother_mobile_number) VALUES
+('1234567890', 'Michael Doe', 'Engineer', '1234567890', 'Sarah Doe', 'Teacher', '0987654321'),
+('0987654321', 'Robert Smith', 'Doctor', 234567891, 'Laura Smith', 'Homemaker', 345678901);
+INSERT INTO student_education (prn, ssc_percentage, ssc_medium, ssc_board, hsc_or_diploma_percentage, hsc_or_diploma_medium, hsc_or_diploma_board, cet_percentile, jee_percentile) VALUES
+('1234567890', 85.5, 'English', 'CBSE', 90.0, 'English', 'State Board', 85.0, NULL),
+('0987654321', 92.0, 'Marathi', 'State Board', 87.5, 'Marathi', 'CBSE', NULL, 80.0);
+INSERT INTO student_other (prn, hobbies, strengths, weakness, short_term_goals, long_term_goals, extra_curricular) VALUES
+('1234567890', 'Reading, Coding', 'Problem-solving', 'Impatient', 'Get a summer internship', 'Become a software architect', 'Debate Club'),
+('0987654321', 'Painting, Running', 'Creativity', 'Shyness', 'Improve public speaking skills', 'Start an art business', 'Art Club, Athletics');
 
 
 -- Create a new table to combine all details
