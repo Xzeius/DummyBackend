@@ -1,44 +1,44 @@
 .content {
   width: 75%;
 }
-
 .content--header {
+  width: 73%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-
 .header--title {
   color: #526d82;
 }
-
 .header--activity {
   display: flex;
   align-items: center;
   gap: 20px;
 }
-
 .search-box {
   background: #dde6ed;
-  padding: 2px 10px;
+  padding: 8px 10px;
   border-radius: 10px;
   display: flex;
   align-items: center;
 }
-
-
 .search-box input {
   border: none;
-  background: none;
-  padding: 5px;
   outline: none;
+  background: transparent;
+  padding: 5px;
 }
+select, input[type="text"] ,textarea{
+  background: #dde6ed !important;
+  border:none !important;
+}
+
 
 .search-box .icon {
   color: #969393;
-  font-size: 18px;
-  transition: 0.1s ease-in-out;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.5s ease-in-out;
 }
 
 .search-box .icon:active {
@@ -53,11 +53,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.5s ease-in-out;
 }
 
 .notify .icon {
   font-size: 20px;
-  transition: 0.1s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 .icon:hover {
@@ -98,14 +99,13 @@
 
 .card--container {
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-evenly; /* Change to space-around to balance space */
+  align-items: center;
   margin-top: 2rem;
 }
 
 .card {
-  flex: 1 1 21%; /* Adjusted to 21% to fit five cards with gaps */
+  flex: 1; /* Adjusted to 21% to fit five cards with gaps */
   max-width: 23%; /* Ensures each card doesn't exceed 23% of the row width */
   background: #dde6ed;
   padding: 20px;
@@ -137,5 +137,13 @@
 .card:hover .card--cover .card-icon {
   color: #145090; /* Change to the desired hover color */
 }
-
+.card--title{
+  background: #ffffffc0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #526d82;
+  border-radius: 10px;
+}
 

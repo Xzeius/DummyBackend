@@ -8,8 +8,8 @@ const PersonalDetails = () => {
     longTermGoals: "",
     shortTermGoals: "",
     fiveYears: "",
-    numberOfEarners: 1,  // Default to 1 earner
-    salary: [""],  // Default to 1 salary input field
+    numberOfEarners: 0,
+    salary: [],
   });
 
   const handleSiblingsChange = (e) => {
@@ -124,23 +124,20 @@ const PersonalDetails = () => {
           value={formData.numberOfEarners}
           onChange={handleEarnersChange}
           required
-          min="0"  // Allow the user to set earners to zero
         />
       </label>
 
-      <label>
-        Salary of Each Earner:
-        {formData.salary.map((salary, index) => (
+      {formData.salary.map((salary, index) => (
+        <label key={index}>
+          Salary of Earner {index + 1}:
           <input
-            key={index}
             type="number"
-            name={`salary-${index}`}
             value={salary}
             onChange={(e) => handleSalaryChange(index, e)}
             required
           />
-        ))}
-      </label>
+        </label>
+      ))}
 
       <button type="submit">Submit</button>
     </form>

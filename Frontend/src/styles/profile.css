@@ -1,0 +1,8 @@
+.profile{
+  flex: 1;
+}
+.profile--header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

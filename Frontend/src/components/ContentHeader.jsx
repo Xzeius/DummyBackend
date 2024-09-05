@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { BiSearch, BiNotification, BiCog } from "react-icons/bi";
 import '../styles/content.css';
 
@@ -15,9 +14,6 @@ const Content = () => {
         <div className="notify">
           <BiNotification className="icon" />
         </div>
-        <Link to="/settings" className="notify"> 
-          <BiCog className="icon" />
-        </Link>
       </div>
     </div>
   );

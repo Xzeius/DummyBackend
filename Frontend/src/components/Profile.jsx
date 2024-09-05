@@ -1,7 +1,11 @@
 import React from "react";
+import ProfileHeader from './ProfileHeader';
+import '../styles/profile.css'
 const Profile=() =>{
   return(
-    <div>Profile</div>
+    <div className="profile">
+      <ProfileHeader></ProfileHeader>
+    </div>
   )
 }
 

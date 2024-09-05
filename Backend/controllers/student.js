@@ -1,71 +1,4 @@
 
-// // Backend/controllers/student.js
-// const db = require('../config/db.js');
-
-// // Get student details by PRN
-// const getStudentByPRN = (req, res) => {
-//     const prn = req.params.prn;
-//     const query = 'SELECT * FROM student_details WHERE prn = ?';
-//     db.query(query, [prn], (err, results) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json(results[0]);
-//     });
-// };
-
-// // Add new student details
-// const addStudent = (req, res) => {
-//     const newStudent = req.body;
-
-//     // Convert date_of_birth to 'YYYY-MM-DD' if it's provided
-//     if (newStudent.date_of_birth) {
-//         const date = new Date(newStudent.date_of_birth);
-//         const formattedDate = date.toISOString().split('T')[0]; // 'YYYY-MM-DD' format
-//         newStudent.date_of_birth = formattedDate;
-//     }
-
-//     const query = 'INSERT INTO student_details SET ?';
-//     db.query(query, newStudent, (err) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.status(201).send('Student details added');
-//     });
-// };
-
-// // Update student details
-// const updateStudent = (req, res) => {
-//     const prn = req.params.prn;
-//     const updatedStudent = req.body;
-
-//     if (updatedStudent.date_of_birth) {
-//         const date = new Date(updatedStudent.date_of_birth);
-//         const formattedDate = date.toISOString().split('T')[0]; // 'YYYY-MM-DD' format
-//         updatedStudent.date_of_birth = formattedDate;
-//     }
-
-//     const query = 'UPDATE student_details SET ? WHERE prn = ?';
-//     db.query(query, [updatedStudent, prn], (err) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.send('Student details updated');
-//     });
-// };
-
-// // Delete student details
-// const deleteStudent = (req, res) => {
-//     const prn = req.params.prn;
-//     const query = 'DELETE FROM student_details WHERE prn = ?';
-//     db.query(query, [prn], (err) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.send('Student details deleted');
-//     });
-// };
-
-// module.exports = {
-//     getStudentByPRN,
-//     addStudent,
-//     updateStudent,
-//     deleteStudent
-// };
-
-
 // Backend/controllers/student.js
 const db = require('../config/knex.js');
 
@@ -74,30 +7,25 @@ const getStudentByPRN = async (req, res) => {
     const prn = req.params.prn;
     try {
         const student = await db('student_details').where('prn', prn).first();
-        res.json(student);
+        const personal = await db('student_personal').where('prn', prn).first();
+        const parents = await db('student_parents').where('prn', prn).first();
+        const education = await db('student_education').where('prn', prn).first();
+        const other = await db('student_other').where('prn', prn).first();
+
+        const studentData = {
+            ...student,
+            ...personal,
+            ...parents,
+            ...education,
+            ...other,
+        };
+
+        res.json(studentData);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-// Add new student details
-const addStudent = async (req, res) => {
-    const newStudent = req.body;
-
-    // Convert date_of_birth to 'YYYY-MM-DD' if it's provided
-    if (newStudent.date_of_birth) {
-        const date = new Date(newStudent.date_of_birth);
-        const formattedDate = date.toISOString().split('T')[0]; // 'YYYY-MM-DD' format
-        newStudent.date_of_birth = formattedDate;
-    }
-
-    try {
-        await db('student_details').insert(newStudent);
-        res.status(201).send('Student details added');
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
 
 // Update student details
 const updateStudent = async (req, res) => {
@@ -111,19 +39,51 @@ const updateStudent = async (req, res) => {
     }
 
     try {
-        await db('student_details').where('prn', prn).update(updatedStudent);
-        res.send('Student details updated');
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+        await db.transaction(async (trx) => {
+            await trx('student_details').where('prn', prn).update({
+                fullname: updatedStudent.fullname,
+                ac_id: updatedStudent.ac_id,
+            });
 
-// Delete student details
-const deleteStudent = async (req, res) => {
-    const prn = req.params.prn;
-    try {
-        await db('student_details').where('prn', prn).del();
-        res.send('Student details deleted');
+            await trx('student_personal').where('prn', prn).update({
+                photo: updatedStudent.photo,
+                date_of_birth: updatedStudent.date_of_birth,
+                mother_tongue: updatedStudent.mother_tongue,
+                blood_group: updatedStudent.blood_group,
+                year_of_admission: updatedStudent.year_of_admission,
+            });
+
+            await trx('student_parents').where('prn', prn).update({
+                father_name: updatedStudent.father_name,
+                father_occupation: updatedStudent.father_occupation,
+                father_mobile_number: updatedStudent.father_mobile_number,
+                mother_name: updatedStudent.mother_name,
+                mother_occupation: updatedStudent.mother_occupation,
+                mother_mobile_number: updatedStudent.mother_mobile_number,
+            });
+
+            await trx('student_education').where('prn', prn).update({
+                ssc_percentage: updatedStudent.ssc_percentage,
+                ssc_medium: updatedStudent.ssc_medium,
+                ssc_board: updatedStudent.ssc_board,
+                hsc_or_diploma_percentage: updatedStudent.hsc_or_diploma_percentage,
+                hsc_or_diploma_medium: updatedStudent.hsc_or_diploma_medium,
+                hsc_or_diploma_board: updatedStudent.hsc_or_diploma_board,
+                cet_percentile: updatedStudent.cet_percentile,
+                jee_percentile: updatedStudent.jee_percentile,
+            });
+
+            await trx('student_other').where('prn', prn).update({
+                hobbies: updatedStudent.hobbies,
+                strengths: updatedStudent.strengths,
+                weakness: updatedStudent.weakness,
+                short_term_goals: updatedStudent.short_term_goals,
+                long_term_goals: updatedStudent.long_term_goals,
+                extra_curricular: updatedStudent.extra_curricular,
+            });
+        });
+
+        res.send('Student details updated');
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -131,7 +91,7 @@ const deleteStudent = async (req, res) => {
 
 module.exports = {
     getStudentByPRN,
-    addStudent,
     updateStudent,
-    deleteStudent
 };
+
+
