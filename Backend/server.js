@@ -1,4 +1,5 @@
 // Backend/server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -15,6 +16,9 @@ app.use(bodyParser.json());
 // Use routes
 app.use('/students', studentRoutes);
 app.use('/mentors', mentorRoutes);
+app.use('/', (req,res)=>{
+    res.send({message:"Hello World !!!"})
+})
 
 const PORT = 8800;
 app.listen(PORT, () => {

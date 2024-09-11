@@ -1,4 +1,4 @@
-.personal-details-form {
+.form-details-form {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
@@ -8,25 +8,35 @@
   box-sizing: border-box;
 }
 
-.personal-details-form h2 {
+
+.form-details-form h2 {
   color: #526d82;
   margin-bottom: 20px;
   text-align: center;
 }
 
-.personal-details-form label {
-  display: block;
-  margin-bottom: 10px;
+.form-details-form .form-row {
   font-weight: bold;
-  color: #333;
+  color: #4a5568;
+  display: flex;
+  gap: 20px; /* Space between the two fields */
+  margin-bottom: 20px; /* Space below each row */
 }
 
-.personal-details-form input[type="text"],
-.personal-details-form input[type="number"],
-.personal-details-form textarea {
-  width: 100%;
+.form-details-form .form-row label {
+  flex: 1; /* Each label/input pair takes up equal space */
+  min-width: 0; /* Prevents overflow issues */
+}
+
+.form-details-form input[type="text"],
+.form-details-form input[type="email"],
+.form-details-form input[type="tel"],
+.form-details-form input[type="file"],
+.form-details-form input[type="date"],
+.form-details-form select,
+.form-details-form textarea {
+  width: 100%; /* Full width of its parent (the label) */
   padding: 10px;
-  margin-bottom: 20px;
   border-radius: 5px;
   border: 1px solid #dde6ed;
   box-sizing: border-box;
@@ -36,25 +46,22 @@
   transition: border-color 0.2s ease-in-out;
 }
 
-.personal-details-form input[type="text"]:focus,
-.personal-details-form input[type="number"]:focus,
-.personal-details-form textarea:focus {
+.form-details-form input[type="text"]:focus,
+.form-details-form input[type="email"]:focus,
+.form-details-form input[type="tel"]:focus,
+.form-details-form input[type="file"]:focus,
+.form-details-form input[type="date"]:focus,
+.form-details-form select:focus,
+.form-details-form textarea:focus {
   border-color: #526d82;
 }
 
-.personal-details-form textarea {
+.form-details-form textarea {
   resize: vertical;
   min-height: 100px;
 }
 
-.personal-details-form .salary-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.personal-details-form button[type="submit"] {
+.form-details-form button[type="submit"] {
   padding: 10px 20px;
   background-color: #526d82;
   color: #fff;
@@ -67,6 +74,6 @@
   box-sizing: border-box;
 }
 
-.personal-details-form button[type="submit"]:hover {
+.form-details-form button[type="submit"]:hover {
   background-color: #145090;
 }

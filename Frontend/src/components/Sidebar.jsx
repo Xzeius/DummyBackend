@@ -1,57 +1,83 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { BiHome, BiUser, BiBook, BiGridAlt, BiCog,BiEdit } from "react-icons/bi";
+import React, { useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  BiHome,
+  BiUser,
+  BiBook,
+  BiGridAlt,
+  BiCog,
+  BiEdit,
+  BiChevronDown,
+} from "react-icons/bi";
 import "../styles/sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
+  // const { prn } = useParams(); // Retrieve PRN from the URL
+  const prn="PRN001";
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  console.log(prn);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
   return (
     <div className="menu">
       <div className="logo">
-        <Link to="/dashboard" className="logo-link">
+        <Link to={`/dashboard/${prn}`} className="logo-link">
           <h2>SIES GST</h2>
         </Link>
       </div>
       <div className="menu--list">
         <Link
-          to="/dashboard"
-          className={`item ${location.pathname === "/dashboard" ? "active" : ""}`}
+          to={`/dashboard/${prn}`}
+          className={`item ${location.pathname === `/dashboard/${prn}` ? "active" : ""}`}
         >
           <BiHome className="icon" />
           Dashboard
         </Link>
+
+        {/* Dropdown for Form Sections */}
+        <div className={`item dropdown ${dropdownOpen ? "active" : ""}`}>
+          <div onClick={toggleDropdown} className="dropdown-toggle">
+            <BiEdit className="icon" />
+            Fill your form
+            <BiChevronDown className={`icon dropdown-icon ${dropdownOpen ? "open" : ""}`} />
+          </div>
+          {dropdownOpen && (
+            <div className="dropdown-menu">
+              <Link
+                to={`/personal-details/${prn}`}
+                className={`dropdown-item ${
+                  location.pathname === `/personal-details/${prn}` ? "active" : ""
+                }`}
+              >
+                Personal Details
+              </Link>
+              <Link
+                to={`/academic-details/${prn}`}
+                className={`dropdown-item ${
+                  location.pathname === `/academic-details/${prn}` ? "active" : ""
+                }`}
+              >
+                Academic Details
+              </Link>
+              <Link
+                to={`/MiscDetails/${prn}`}
+                className={`dropdown-item ${
+                  location.pathname === `/MiscDetails/${prn}` ? "active" : ""
+                }`}
+              >
+                Miscellaneous Details
+              </Link>
+            </div>
+          )}
+        </div>
+
         <Link
-          to="/form-details"
-          className={`item ${location.pathname === "/form-details" ? "active" : ""}`}
-        >
-          <BiEdit className="icon" />
-          Fill your Form
-        </Link>
-        <Link
-          to="/personal-details"
-          className={`item ${location.pathname === "/personal-details" ? "active" : ""}`}
-        >
-          <BiUser className="icon" />
-          Personal Details
-        </Link>
-        <Link
-          to="/academic-details"
-          className={`item ${location.pathname === "/academic-details" ? "active" : ""}`}
-        >
-          <BiBook className="icon" />
-          Academic Details
-        </Link>
-        <Link
-          to="/MiscDetails"
-          className={`item ${location.pathname === "/MiscDetails" ? "active" : ""}`}
-        >
-          <BiGridAlt className="icon" />
-          Miscellaneous Details
-        </Link>
-        <Link
-          to="/settings"
-          className={`item ${location.pathname === "/settings" ? "active" : ""}`}
+          to={`/settings/${prn}`}
+          className={`item ${location.pathname === `/settings/${prn}` ? "active" : ""}`}
         >
           <BiCog className="icon" />
           Settings

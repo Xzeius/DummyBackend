@@ -66,7 +66,7 @@ const MiscDetails = () => {
           name="hobbies"
           value={formData.hobbies}
           onChange={handleChange}
-          placeholder="List your hobbies"
+          placeholder="eg. Painting, Doodling"
           required
           className="large-textarea"
         />
@@ -79,7 +79,7 @@ const MiscDetails = () => {
           name="favoriteSubjects"
           value={formData.favoriteSubjects}
           onChange={handleChange}
-          placeholder="List your favorite subjects"
+          placeholder="eg. Mathematics, Quantum Physics"
           required
         />
       </label>
@@ -114,11 +114,11 @@ const MiscDetails = () => {
           name="interests"
           value={formData.interests}
           onChange={handleChange}
-          placeholder="Share your interests"
+          placeholder="eg. "
           required
         />
       </label>
-
+      
       <label>
         Preferred Study Environment:
         <input
@@ -138,17 +138,17 @@ const MiscDetails = () => {
           name="extracurricularActivities"
           value={formData.extracurricularActivities}
           onChange={handleChange}
-          placeholder="List your extracurricular activities"
+          placeholder="eg. Hackathons, Cognition"
           required
         />
       </label>
 
       <label>
-        Upload Achievements Certificate :
+        Upload Achievements Certificate:
         <input
           type="file"
           name="certificate"
-          accept=".pdf, .jpg, .jpeg"
+          accept=".pdf"  /* Restrict file upload to PDF only */
           onChange={handleFileChange}
           required
         />

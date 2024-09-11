@@ -12,7 +12,7 @@ router.get('/:prn', studentController.getStudentByPRN);
 // Update student details
 router.put('/:prn', studentController.updateStudent);
 
-
+// router.get('/branch/:ac_id', studentController.getBranchByAcID);
 
 module.exports = router;
 
