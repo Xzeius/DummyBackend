@@ -1,106 +1,110 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js/auto';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/AttendanceChart.css';
 
-const ChartComponent = () => {
-  const chartRef = useRef(null);
-  const [chartType, setChartType] = useState('bar'); // Default chart type is bar
-  const [attendanceType, setAttendanceType] = useState('theory'); // Default attendance type is theory
-  const [attendanceData, setAttendanceData] = useState([]); // State to store fetched data
-  const myChartRef = useRef(null);
+const AttendanceTable = () => {
+  const [attendanceData, setAttendanceData] = useState(null); // State to store the fetched attendance data
+  const [loading, setLoading] = useState(true); // State to manage the loading status
+  const [error, setError] = useState(null); // State to manage any errors
 
-  // Fetch the attendance data from the backend (or public folder)
+  // Fetch attendance data using useEffect and axios
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get('/attendance.json'); // Access JSON file from the public folder
-        setAttendanceData(response.data.attendance);
+        const response = await axios.get('http://localhost:8800/students/attendance'); // Replace with your actual API URL
+        setAttendanceData(response.data); // Assuming the response data is in the correct format
+        setLoading(false); // Turn off loading when data is fetched
       } catch (error) {
-        console.error('Error fetching attendance data', error);
+        setError('Failed to fetch attendance data');
+        setLoading(false); // Turn off loading even in case of an error
       }
     };
 
-    fetchData();
+    fetchAttendanceData(); // Trigger the fetch function when the component mounts
   }, []);
 
-  useEffect(() => {
-    if (myChartRef.current) {
-      myChartRef.current.destroy(); // Destroy existing chart instance if it exists
-    }
+  // Handle loading state
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    // Prepare the labels (subjects) and data (attendance values)
-    const subjects = attendanceData.map((item) => item.subject); // Extract subjects
-    const attendanceValues = attendanceData.map((item) => 
-      attendanceType === 'theory' ? item.theory : item.lab
-    ); // Extract attendance values based on type (theory/lab)
+  // Handle error state
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-    const ctx = chartRef.current.getContext('2d');
-    myChartRef.current = new Chart(ctx, {
-      type: chartType,
-      data: {
-        labels: subjects, // Use subjects for x-axis labels
-        datasets: [
-          {
-            label: attendanceType === 'theory' ? 'Theory Attendance' : 'Lab Attendance',
-            data: attendanceValues, // Use the filtered attendance data
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
+  // Handle case when attendanceData is not available or empty
+  if (!attendanceData || !attendanceData.theory || !attendanceData.practical || !attendanceData.dates) {
+    return <div>No attendance data available</div>;
+  }
+
+  const { theory, practical, dates } = attendanceData;
+
+  // Ensure unique dates
+  const uniqueDates = [...new Set(dates)];
+
+  const subjects = Object.keys(theory);
+
+  const renderTableRows = (data) => {
+    return subjects.map((subject) => {
+      let lastNumber = 0;
+      return (
+        <tr key={subject}>
+          <td className="subject-cell">{subject}</td>
+          {data[subject].map((attendance, index) => {
+            if (attendance === 1) {
+              lastNumber += 1;
+            }
+            return (
+              <td key={index} className={attendance === 1 ? 'present' : 'absent'}>
+                {lastNumber}
+              </td>
+            );
+          })}
+        </tr>
+      );
     });
-  }, [chartType, attendanceType, attendanceData]);
+  };
 
   return (
-    <div className="chart">
-      <div className="dropdowns">
-        <label>
-          Attendance Type:
-          <select value={attendanceType} onChange={(e) => setAttendanceType(e.target.value)}>
-            <option value="theory">Theory</option>
-            <option value="lab">Lab</option>
-          </select>
-        </label>
-  
-        <label>
-          Chart Type:
-          <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
-            <option value="bar">Bar</option>
-            <option value="line">Line</option>
-            <option value="doughnut">Doughnut</option>
-            <option value="polarArea">Polar Area</option>
-            <option value="radar">Radar</option>
-          </select>
-        </label>
+    <div className="attendance-tables">
+      <div className="attendance-table">
+        <h4>Theory</h4>
+        <div className="table-wrapper">
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th className="subject-header">Subject</th>
+                  {uniqueDates.map((date) => (
+                    <th key={date}>{date}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>{renderTableRows(theory)}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <div className="chart-container">
-        <canvas ref={chartRef}></canvas>
+      <div className="attendance-table">
+        <h4>Practical</h4>
+        <div className="table-wrapper">
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th className="subject-header">Subject</th>
+                  {uniqueDates.map((date) => (
+                    <th key={date}>{date}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>{renderTableRows(practical)}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
-  
-
 };
 
-export default ChartComponent;
+export default AttendanceTable;

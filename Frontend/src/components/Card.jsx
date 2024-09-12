@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../styles/content.css';
 import { BiCalendar, BiMessage, BiEdit } from "react-icons/bi"; // Imported necessary icons
 
+const prn="PRN001"; //Added prn here for redirect
+
 const course = [
   {
     title: "Attendance",
@@ -11,12 +13,12 @@ const course = [
   {
     title: "Message",
     icon: <BiMessage className="card-icon" />,
-    path: "/MessageCompose", // Path for Message card
+    path: `/MessageCompose`, // Path for Message card
   },
   {
     title: "About you",
     icon: <BiEdit className="card-icon" />,
-    path: "/personal-details", // Path for Fill Your Form card
+    path: `/personal-details/${prn}`, // Path for Fill Your Form card
   },
 ];
 

@@ -49,6 +49,18 @@
   text-align: center;
 }
 
+.user--detail .username {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #526d82;
+  margin-bottom: 10px;
+}
+
+.user--detail p {
+  color: #526d82;
+  margin: 5px 0;
+  font-size: 1rem;
+}
 
 /* Responsive styles */
 @media (max-width: 768px) {

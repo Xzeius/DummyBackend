@@ -38,19 +38,14 @@ const PersonalDetails = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8800/students/${prn}`);
+        // const response = await axios.get(`http://localhost:8800/students/${prn}`);
+        const response = await axios.get(`https://mentor-mentee-backend.vercel.app/students/${prn}`);
+
         const studentData = response.data;
 
         setFormData(studentData);
 
-        // Fetch the branch from ac_id
-        if (studentData.ac_id) {
-          const branchResponse = await axios.get(`http://localhost:8800/students/branch/${studentData.ac_id}`);
-          setFormData((prevData) => ({
-            ...prevData,
-            branch: branchResponse.data.branch,
-          }));
-        }
+      
       } catch (error) {
         console.error("Error fetching student data or branch:", error);
       }
@@ -76,7 +71,7 @@ const PersonalDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8800/students/${prn}`, formData);
+      await axios.put(`https://mentor-mentee-backend.vercel.app/students/${prn}`, formData);
       alert("Student details updated successfully");
     } catch (error) {
       console.error("Error updating student details:", error);
@@ -182,8 +177,7 @@ const PersonalDetails = () => {
         </label>
       </div>
 
-          <div className="form-row">
-          <label>
+      <label>
         Current Address:
         <textarea
           name="current_address"
@@ -192,7 +186,6 @@ const PersonalDetails = () => {
           required
         />
       </label>
-          </div>
 
       {/* Row 4: Father's Name and Occupation */}
       <div className="form-row">
@@ -212,7 +205,7 @@ const PersonalDetails = () => {
           <input
             type="text"
             name="fathersOccupation"
-            value={formData.fathersOccupation}
+            value={formData.father_occupation}
             onChange={handleChange}
             required
           />
