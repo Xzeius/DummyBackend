@@ -6,7 +6,8 @@ import '../styles/profile.css';
 import profileImage from '../assets/images/wlr.jpg'; 
 
 const Profile = () => {
-  const { prn } = useParams();
+  // const { prn } = useParams();
+  const prn = 'PRN001';
   const [userData, setUserData] = useState({
     name: '',
     rollNumber: '',
