@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom"; // Import useParams hook
+import { DateTime } from "luxon";
+
 import "../styles/PersonalDetails.css";
 
 const PersonalDetails = () => {
@@ -38,10 +40,15 @@ const PersonalDetails = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        // const response = await axios.get(`http://localhost:8800/students/${prn}`);
-        const response = await axios.get(`https://mentor-mentee-backend.vercel.app/students/${prn}`);
+        const response = await axios.get(`http://localhost:8800/students/${prn}`);
+        // const response = await axios.get(`https://mentor-mentee-backend.vercel.app/students/${prn}`);
 
         const studentData = response.data;
+
+        // Convert date_of_birth from the API to a Luxon DateTime object for easy manipulation
+        if (studentData.date_of_birth) {
+          studentData.date_of_birth = DateTime.fromISO(studentData.date_of_birth).toISODate();
+        }
 
         setFormData(studentData);
 
@@ -71,7 +78,13 @@ const PersonalDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://mentor-mentee-backend.vercel.app/students/${prn}`, formData);
+      // Ensure date_of_birth is in ISO format for submission
+      const updatedData = {
+        ...formData,
+        date_of_birth: DateTime.fromISO(formData.date_of_birth).toISO(), // Convert back to ISO format
+      };
+
+      await axios.put(`https://mentor-mentee-backend.vercel.app/students/${prn}`, updatedData);
       alert("Student details updated successfully");
     } catch (error) {
       console.error("Error updating student details:", error);
